@@ -13,6 +13,9 @@ export class CategoryController {
         this.logger = logger;
         this.create = this.create.bind(this);
     }
+    //Our error handler can only catch the errors coming from synchronous calls
+    //For catching error out of async codes need to put in try catch and call the next fun with error
+    //or use the asyncWrapper that we use inside the router to handle such errors
     async create(req: Request, res: Response, next: NextFunction) {
         const result = validationResult(req);
         if (!result.isEmpty()) {

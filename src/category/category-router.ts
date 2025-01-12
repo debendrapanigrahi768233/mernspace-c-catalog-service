@@ -5,6 +5,8 @@ import { CategoryService } from "./category-service";
 import logger from "../config/logger";
 import { asyncWrapper } from "../common/utils/wrapper";
 import authenticate from "../common/middlewares/authenticate";
+import { canAccess } from "../common/middlewares/canAccess";
+import { Roles } from "../common/constants";
 
 const router = express.Router();
 
@@ -15,6 +17,7 @@ router.post(
     "/",
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     authenticate,
+    canAccess([Roles.ADMIN]),
     categoryValidator,
     asyncWrapper(categoryController.create),
 );

@@ -6,14 +6,22 @@ import createHttpError from "http-errors";
 import { Logger } from "winston";
 import { ProductService } from "./product-service";
 import { Product } from "./product-types";
+import { FileStorage } from "../common/types/storage";
+import { v4 as uuidv4 } from "uuid";
+import { UploadedFile } from "express-fileupload";
 
 export class ProductController {
     private logger: Logger;
     private productService: ProductService;
-    constructor(logger: Logger, productService: ProductService) {
+    private storage: FileStorage;
+    constructor(
+        logger: Logger,
+        productService: ProductService,
+        storage: FileStorage,
+    ) {
         this.logger = logger;
         this.productService = productService;
-
+        this.storage = storage;
         this.create = this.create.bind(this); //if you make the create method as arrow function then you wont need to bit the create manually
     }
     //Our error handler can only catch the errors coming from synchronous calls
@@ -24,6 +32,14 @@ export class ProductController {
         if (!result.isEmpty()) {
             return next(createHttpError(400, result.array()[0].msg as string));
         }
+
+        //upload image
+        const image = req.files!.image as UploadedFile;
+        const imageName = uuidv4();
+        await this.storage.upload({
+            filename: imageName,
+            fileData: image.data.buffer,
+        });
 
         const {
             name,
@@ -41,14 +57,14 @@ export class ProductController {
             attributes: JSON.parse(attributes as string),
             tenantId,
             categoryId,
-            image: "image.jpg", //Todo: image upload to s3, we use multipart formdata whenever we need to upload a file
+            image: imageName, //Todo: image upload to s3, we use multipart formdata whenever we need to upload a file
         };
 
         //create product
         const newProduct = await this.productService.createProduct(
             product as unknown as Product,
         );
-        //upload image
+
         //save product to data base
         //send the product as response
 

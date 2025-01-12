@@ -1,31 +1,27 @@
 {
     "name": "Pizza",
-    "priceConfiguration":{
-        "Size":{
+    "priceConfiguration": {
+        "Size": {
             "priceType": "base",
-            "availableOptions":[
-                "Small",
-                "Medium",
-                "Large"
-            ]
+            "availableOptions": ["Small", "Medium", "Large"]
         },
-        "Crust":{
-            "priceType":"aditional",
-            "availableOptions":["Thin","Thick"]
+        "Crust": {
+            "priceType": "aditional",
+            "availableOptions": ["Thin", "Thick"]
         }
     },
-    "attributes":[
+    "attributes": [
         {
-            "name":"isHit",
+            "name": "isHit",
             "widgetType": "switch",
             "defaultValue": "No",
-            "availableOptions":["Yes","No"]
+            "availableOptions": ["Yes", "No"]
         },
         {
-            "name":"Spiciness",
+            "name": "Spiciness",
             "widgetType": "radio",
             "defaultValue": "Medium",
-            "availableOptions":["Less", "Medium", "Hot"]
+            "availableOptions": ["Less", "Medium", "Hot"]
         }
     ]
 }

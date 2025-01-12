@@ -8,7 +8,7 @@
         }
     },
     "Crust": {
-        "priceType": "additional",
+        "priceType": "aditional",
         "availableOptions": {
             "Thin": 50,
             "Thick": 100

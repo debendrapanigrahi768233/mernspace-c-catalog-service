@@ -9,5 +9,6 @@ export interface AuthRequest extends Request {
         sub: string;
         role: string;
         id?: string; //? mark to make it optional
+        tenant?: string;
     };
 }

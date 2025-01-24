@@ -157,6 +157,19 @@ export class ProductController {
                     : 10,
             },
         );
-        res.json(products);
+        const finalProductsWithImage =
+            products &&
+            (products.data as Product[]).map((product: Product) => {
+                return {
+                    ...product,
+                    image: this.storage.getObjectUri(product?.image),
+                };
+            });
+        res.json({
+            data: finalProductsWithImage,
+            total: products.total,
+            pageSize: products.limit,
+            currentPage: products.page,
+        });
     };
 }

@@ -5,6 +5,7 @@ import {
     PutObjectCommand,
     S3Client,
 } from "@aws-sdk/client-s3";
+import createHttpError from "http-errors";
 
 // npm i @aws-sdk/client-s3
 export class S3Storage implements FileStorage {
@@ -37,7 +38,20 @@ export class S3Storage implements FileStorage {
         // @ts-ignore
         return await this.client.send(new DeleteObjectCommand(objectParams));
     }
-    getObjectUri(): string {
-        throw new Error("Method not implemented.");
+    getObjectUri(fileName: string): string {
+        //https://mernspace-project-deb.s3.ap-south-1.amazonaws.com/3b8945a1-7287-4232-88dc-43458eb21fbd
+        // Bucket Name : mernspace-project-deb, Bucket : s3, Region: ap-south-1, domain: .amazonaws.com, imageId: 3b8945a1-7287-4232-88dc-43458eb21fbd
+        const bucket = config.get("s3.bucket");
+        const region = config.get("s3.region");
+
+        if (typeof bucket !== "string" || typeof region !== "string") {
+            throw createHttpError(
+                500,
+                "S3 bucket or region is not configured properly.",
+            );
+        }
+        //<img src="https://mernspace-project-deb.s3.ap-south-1.amazonaws.com/13973a51-c23c-4ab0-a833-cd541f53be7f"></img>
+
+        return `https://${bucket}.s3.${region}.amazonaws.com/${fileName}`;
     }
 }

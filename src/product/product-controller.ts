@@ -71,6 +71,7 @@ export class ProductController {
         //save product to data base
         //send the product as response
 
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         res.json({ id: newProduct._id });
     }
 
@@ -149,6 +150,12 @@ export class ProductController {
         const products = await this.productService.getProducts(
             q as string,
             filters,
+            {
+                page: req.query.page ? parseInt(req.query.page as string) : 1,
+                limit: req.query.limit
+                    ? parseInt(req.query.limit as string)
+                    : 10,
+            },
         );
         res.json(products);
     };
